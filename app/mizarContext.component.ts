@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-//import { AstroWeb } from 'AstroWebModule';
+import { Config } from './config';
+import { ConfigurationService } from './configuration.service'
 
 declare var AstroWeb: any;
 
@@ -11,11 +12,13 @@ console.log(AstroWeb.Globe);
   	<div class="canvas">
   		<canvas class="noSelect" id="AstroWebCanvas" style="border: none; margin: 0; padding: 0;" width="0" height="0"></canvas>
   	</div>
-  `
+  `,
+  providers: [ConfigurationService]
 })
 export class MizarContext {
 	globe: any;
 	navigation: any;
+	conf: Config;
 
 	public initCanvas(canvas) {
 		// Set canvas dimensions from width/height attributes
@@ -43,7 +46,9 @@ export class MizarContext {
 		// TODO
 	};
 
-	constructor(){
+	constructor(private configrationService:ConfigurationService){
+		this.conf = configrationService.getConfiguration();
+		console.log("conf", this.conf);
 	};
 
 
