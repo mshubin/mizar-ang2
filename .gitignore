@@ -1,0 +1,19 @@
+# Generated js/map
+/app/**/*.js
+/app/**/*.map
+
+# Logs
+logs
+*.log
+
+# OS generated files #
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Node Files #
+/node_modules
+
+# Dist #
+/dist
