@@ -1,6 +1,5 @@
 # Generated js/map
-/app/**/*.js
-/app/**/*.map
+/build
 
 # Logs
 logs
