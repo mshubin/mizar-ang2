@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 //import { AstroWeb } from 'AstroWebModule';
-import { MizarContext } from './mizarContext.component';
+import { MizarCanvas } from './mizarCanvas.component';
 declare var AstroWeb: any;
 
 console.log("AstroWeb", AstroWeb);
@@ -12,7 +12,7 @@ console.log("AstroWeb", AstroWeb);
     	<mizar-canvas></mizar-canvas>
   	</div>
   `,
-  directives: [MizarContext]
+  directives: [MizarCanvas]
 })
 export class AppComponent {
 

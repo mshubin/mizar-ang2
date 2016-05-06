@@ -13,8 +13,8 @@ declare var AstroWeb: any;
   `,
   providers: [MizarService]
 })
-export class MizarContext {
-	
+export class MizarCanvas {
+
 	id:string;
 	constructor(private _mizarService:MizarService){
 		this.id = "AstroWebCanvas";
