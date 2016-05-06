@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 import { MizarContext } from './mizarContext.component';
 declare var AstroWeb: any;
 
-
-console.log(AstroWeb.Globe);
+console.log("AstroWeb", AstroWeb);
 
 @Component({
   selector: 'my-app',
