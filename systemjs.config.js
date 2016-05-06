@@ -16,6 +16,7 @@
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {
     'app':                        { main: 'main.js',  defaultExtension: 'js' },
+    'build':                      { main: 'main.js', defaultExtension: 'js' },
     'rxjs':                       { defaultExtension: 'js' },
     'angular2-in-memory-web-api': { defaultExtension: 'js' },
     'GlobWebModule':              { main: 'src/GlobWeb.js', defaultExtension:'js', meta: { './GlobWeb.js': {
