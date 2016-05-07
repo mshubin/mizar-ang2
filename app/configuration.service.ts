@@ -7,6 +7,6 @@ import { CONFIG } from './config';
 @Injectable()
 export class ConfigurationService {
 	getConfiguration() {
-  		return CONFIG;
-  	}
+		return CONFIG;
+	}
 };

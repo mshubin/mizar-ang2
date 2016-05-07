@@ -58,7 +58,7 @@ export const CONFIG:Config = {
 		"baseUrl": sitoolsBaseUrl + "/healpixcut"
 	},
 	"shortener": {
-	 	"baseUrl": sitoolsBaseUrl + "/shortener"
+		"baseUrl": sitoolsBaseUrl + "/shortener"
 	},
 	"navigation" : {
 		"initTarget": [85.2500, -2.4608],

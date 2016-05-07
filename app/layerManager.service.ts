@@ -180,8 +180,8 @@ export class LayerManagerService {
 
 	handleError(error: any) {
 		let errMsg = error.message || 'Server error';
-    	console.error(errMsg); // log to console instead
-    	return Observable.throw(errMsg);
+		console.error(errMsg); // log to console instead
+		return Observable.throw(errMsg);
 	}
 
 	addLayer(layerDescription:any)  {

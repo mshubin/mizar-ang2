@@ -5,13 +5,13 @@ import { MizarService } from './mizar.service';
 declare var AstroWeb: any;
 
 @Component({
-  selector: 'mizar-canvas',
-  template: `
-  	<div class="canvas">
-  		<canvas class="noSelect" id="{{id}}" style="border: none; margin: 0; padding: 0;" width="0" height="0"></canvas>
-  	</div>
-  `,
-  providers: [MizarService]
+	selector: 'mizar-canvas',
+	template: `
+		<div class="canvas">
+			<canvas class="noSelect" id="{{id}}" style="border: none; margin: 0; padding: 0;" width="0" height="0"></canvas>
+		</div>
+	`,
+	providers: [MizarService]
 })
 export class MizarCanvas {
 
