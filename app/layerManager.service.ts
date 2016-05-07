@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Http, Response} from '@angular/http';
+
+import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 import { MizarService } from './mizar.service';
@@ -33,19 +35,7 @@ export class LayerManagerService {
 		// TODO: Make Mizar a service and inject it here
 		// sky = mizar.sky;
 
-		this.fetch();
-		console.log(this.backgroundSurveys);
-	}
-
-	fetch() {
-		this.http.get('/app/backgroundSurveys.json')
-			.subscribe(
-				response => {
-					this.backgroundSurveys = JSON.parse(_removeComments(response.text()));
-				},
-				err => console.error(err),
-				() => console.log('done')
-			);
+		this.getLayers();
 	}
 
 	updateDefaults(layerDescription: any) {
@@ -177,7 +167,21 @@ export class LayerManagerService {
 	}
 
 	getLayers() {
-		return this.gwLayers;
+		// TODO: Add layerStore ?
+		return this.http.get('/app/backgroundSurveys.json')
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	extractData(response: Response) {
+		this.backgroundSurveys = JSON.parse(_removeComments(response.text()));
+		return this.backgroundSurveys;
+	}
+
+	handleError(error: any) {
+		let errMsg = error.message || 'Server error';
+    	console.error(errMsg); // log to console instead
+    	return Observable.throw(errMsg);
 	}
 
 	addLayer(layerDescription:any)  {

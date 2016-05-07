@@ -26,6 +26,7 @@
     '@angular2-material/sidenav': { main: 'sidenav.js', defaultExtension: 'js', format: 'cjs'},
     '@angular2-material/core': { main: 'core.js', defaultExtension: 'js', format: 'cjs'},
     '@angular2-material/button': { main: 'button.js', defaultExtension: 'js', format: 'cjs'},
+    '@angular2-material/list': { main: 'list.js', defaultExtension: 'js', format: 'cjs'},
   };
 
   var packageNames = [
