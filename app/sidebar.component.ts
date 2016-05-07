@@ -11,14 +11,18 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 @Component({
 	selector: 'mizar-sidebar',
 	styleUrls: [
-			'../node_modules/@angular2-material/sidenav/sidenav.css',
-			'../node_modules/@angular2-material/button/button.css'
+		'../node_modules/@angular2-material/sidenav/sidenav.css',
+		'../node_modules/@angular2-material/button/button.css',
+		'../node_modules/@angular2-material/list/list.css'
 	],
 	directives: [MdButton, MD_SIDENAV_DIRECTIVES, MD_LIST_DIRECTIVES],
+	
 	template: `
 		<md-sidenav-layout style="height: 100%;width: 340px;">
 			<md-sidenav style="overflow-x: hidden;" #start mode="side">
 				<md-list style="width: 300px;">
+					<!-- <paper-item *ngFor="let layer of layers"> -->
+
 					<md-list-item	*ngFor="let layer of layers">
 						<h3 md-line> {{layer.name}} </h3>
 						<p md-line>
@@ -26,6 +30,8 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 							<span class="demo-2"> -- {{layer.category}} </span>
 						</p>
 					</md-list-item>
+
+					<!-- </paper-item> -->
 				</md-list>
 				<!--
 					Start Side Drawer
@@ -43,9 +49,7 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 				-->
 			</md-sidenav>
 			<div>
-				<button (click)="start.toggle()" md-mini-fab>
-					<md-icon class="md-24">Menu</md-icon>
-				</button>
+				<paper-icon-button style="border-radius: 0px 10px 10px 0px; background-color: rgb(111, 156, 203);" icon="menu" (click)="start.toggle()"></paper-icon-button>
 			</div>
 		</md-sidenav-layout>
 	`
