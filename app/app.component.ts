@@ -12,7 +12,7 @@ console.log("AstroWeb", AstroWeb);
 	selector: 'my-app',
 	template: `
 		<div>
-			<mizar-sidebar style="oveflow: visible; position: absolute; top: 0px; height:100%;left:0px;"></mizar-sidebar>
+			<mizar-sidebar style="position: absolute; height: 100%;"></mizar-sidebar>
 			<mizar-canvas></mizar-canvas>
 		</div>
  	`,
