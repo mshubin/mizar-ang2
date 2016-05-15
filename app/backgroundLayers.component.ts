@@ -25,7 +25,6 @@ declare var AstroWeb: any;
 			</md-radio-group>
 		</div>
 	`,
-	pipes: [LayersPipe],
 	directives: [MdRadioButton, MdRadioGroup]
 })
 export class BackgroundLayersComponent {
