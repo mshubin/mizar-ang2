@@ -10,8 +10,7 @@ declare var AstroWeb: any;
 		<div class="canvas">
 			<canvas class="noSelect" id="{{id}}" style="border: none; margin: 0; padding: 0;" width="0" height="0"></canvas>
 		</div>
-	`,
-	providers: [MizarService]
+	`
 })
 export class MizarCanvas {
 
