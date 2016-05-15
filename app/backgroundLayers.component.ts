@@ -36,7 +36,7 @@ export class BackgroundLayersComponent {
 	}
 
 	get backgroundLayers() {
-		return this._layerManager.backgroundSurveys.map(layers => {
+		return this._layerManager.layers.map(layers => {
 			this._backgroundLayers = layers.filter(l => {
 				return l.category == "background";
 			})

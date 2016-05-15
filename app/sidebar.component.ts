@@ -47,7 +47,7 @@ export class SidebarComponent {
 		console.log("Hello sidebar");
 	}
 	get layers() {
-		return this._layerManager.backgroundSurveys.map(layers => {
+		return this._layerManager.layers.map(layers => {
 			this._layers = layers;
 			return this._layers;
 		});

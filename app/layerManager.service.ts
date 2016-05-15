@@ -76,10 +76,9 @@ export class LayerManagerService {
 	gwLayers: any[] = [];
 
 	// Inner representation of all surveys
-	// TODO: rename background surveys into more appropriate word
-	private _backgroundSurveys: BehaviorSubject<any> = new BehaviorSubject([]);
-	get backgroundSurveys() {
-		return this._backgroundSurveys.asObservable();
+	private _layers: BehaviorSubject<any> = new BehaviorSubject([]);
+	get layers() {
+		return this._layers.asObservable();
 	}
 
 	constructor(private http: Http, private _mizarService:MizarService) {
@@ -96,7 +95,7 @@ export class LayerManagerService {
 					return l != null;
 				});
 				console.log("Publishing list", layers);
-				this._backgroundSurveys.next(layers);
+				this._layers.next(layers);
 			},
 			err => console.log("Error retrieving layers")
 		);
@@ -143,7 +142,7 @@ export class LayerManagerService {
 			case "healpix":
 				gwLayer = new AstroWeb.HEALPixLayer(layerDescription);
 				/*
-				TODO: check if it can't be extracted from backgroundSurveys directly
+				TODO: check if it can't be extracted from layers directly
 				if ( layerDesc.availableServices )
 				{
 					gwLayer.availableServices = layerDesc.availableServices;
@@ -169,7 +168,7 @@ export class LayerManagerService {
 				// INFO: no clustering for now..
 				gwLayer = new AstroWeb.OpenSearchLayer(layerDescription);
 
-				// TODO: check if it can't be extracted from backgroundSurveys directly
+				// TODO: check if it can't be extracted from layers directly
 				if (layerDescription.displayProperties)
 					gwLayer.displayProperties = layerDescription.displayProperties;
 				gwLayer.pickable = layerDescription.hasOwnProperty('pickable') ? layerDescription.pickable : true;
@@ -196,7 +195,7 @@ export class LayerManagerService {
 				return null;
 		}
 
-		// TODO: check if it can't be extracted from backgroundSurveys directly
+		// TODO: check if it can't be extracted from layers directly
 		// Attach some properties to gwLayer for components
 		gwLayer.type = layerDescription.type;
 		gwLayer.dataType = layerDescription.dataType;
@@ -245,7 +244,7 @@ export class LayerManagerService {
 
 	getLayers() {
 		// TODO: Add layerStore ?
-		return this.http.get('/app/backgroundSurveys.json')
+		return this.http.get('/app/layers.json')
 			.map(this.parseJSON)
 			.catch(this.handleError);
 	}
