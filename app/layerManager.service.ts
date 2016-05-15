@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Http, Response} from '@angular/http';
 
+import { BehaviorSubject } from "rxjs/Rx";
 import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
@@ -20,22 +21,85 @@ var _removeComments = function(string)
 	return string;
 }
 
+/**
+ *	HSV values in [0..1[
+ *	returns [r, g, b] values from 0 to 255
+ */
+function hsv_to_rgb(h, s, v) {
+	var r, g, b;
+	var h_i = Math.floor(h * 6);
+	var f = h * 6 - h_i;
+	var p = v * (1 - s);
+	var q = v * (1 - f * s);
+	var t = v * (1 - (1 - f) * s);
+	switch (h_i) {
+		case 0:
+			r = v; g = t; b = p;
+			break;
+		case 1:
+			r = q; g = v; b = p;
+			break;
+		case 2:
+			r = p; g = v; b = t;
+			break;
+		case 3:
+			r = p; g = q; b = v;
+			break;
+		case 4:
+			r = t; g = p; b = v;
+			break;
+		case 5:
+			r = v; g = p; b = q;
+			break;
+		default:
+			r = 1; g = 1; b = 1;
+	}
+	return [r, g, b];
+}
+
+/**
+ *	Generate eye-friendly color based on hsv
+ */
+var _generateColor = function() {
+	//use golden ratio
+	var golden_ratio_conjugate = 0.618033988749895;
+	var h = Math.random();
+	h += golden_ratio_conjugate;
+	h %= 1;
+	return hsv_to_rgb(h, 0.5, 0.95);
+}
+
 @Injectable()
 export class LayerManagerService {
 
-	backgroundSurveys: any[];
-	gwLayers: any[];
+	// Not REALLY GlobWeb layers but more its description
+	gwLayers: any[] = [];
 
+	// Inner representation of all surveys
+	// TODO: rename background surveys into more appropriate word
+	private _backgroundSurveys: BehaviorSubject<any> = new BehaviorSubject([]);
+	get backgroundSurveys() {
+		return this._backgroundSurveys.asObservable();
+	}
 
 	constructor(private http: Http, private _mizarService:MizarService) {
 		// TODO: inject CONFIG if needed
 		// configuration = conf;
 		// Store the sky in the global module variable
 
-		// TODO: Make Mizar a service and inject it here
-		// sky = mizar.sky;
-
-		this.getLayers();
+		this.getLayers().subscribe(
+			res => {
+				// Add complete descriptions of every layer
+				let layers = (<Object[]>res).map((layerDesc: any) => {
+					return this.addLayer(layerDesc);
+				}).filter(l => {
+					return l != null;
+				});
+				console.log("Publishing list", layers);
+				this._backgroundSurveys.next(layers);
+			},
+			err => console.log("Error retrieving layers")
+		);
 	}
 
 	updateDefaults(layerDescription: any) {
@@ -47,7 +111,7 @@ export class LayerManagerService {
 		else
 		{
 			// Generate random color
-			var rgb = AstroWeb.Utils.generateColor();
+			var rgb = _generateColor();
 			layerDescription.color = rgb.concat([1]);
 		}
 
@@ -142,6 +206,19 @@ export class LayerManagerService {
 		return gwLayer;
 	}
 
+	setBackgroundSurvey(name:string) {
+		var globe = this._mizarService.globe;
+
+		// FIXME: is the use of gwLayers is appropriate here ?
+		let gwLayer = this.gwLayers.find(l => l.name == name);
+		if (globe.baseImagery) {
+			globe.baseImagery.visible(false);
+		}
+		globe.setBaseImagery(gwLayer);
+		// HACK: find a better way
+		gwLayer._visible = true;
+	}
+
 	addLayerToEngine(gwLayer:any) {
 		var globe = this._mizarService.globe;
 		if ( gwLayer.category == "background" ) {
@@ -149,7 +226,6 @@ export class LayerManagerService {
 				if ( globe.baseImagery ) {
 					globe.baseImagery.visible(false);
 				}
-
 				globe.setBaseImagery(gwLayer);
 			}
 
@@ -157,9 +233,10 @@ export class LayerManagerService {
 			// this.mizar.publish("backgroundLayer:add", gwLayer);
 		} else {
 			// Add to engine
-			if ( !(gwLayer instanceof AstroWeb.PlanetLayer) ) {
+			// TODO: handle planet layer case
+//			if ( !(gwLayer instanceof AstroWeb.PlanetLayer) ) {
 				globe.addLayer( gwLayer );
-			}
+//			}
 
 			// Publish the event
 			// this.mizar.publish("additionalLayer:add", gwLayer);
@@ -169,13 +246,15 @@ export class LayerManagerService {
 	getLayers() {
 		// TODO: Add layerStore ?
 		return this.http.get('/app/backgroundSurveys.json')
-			.map(this.extractData)
+			.map(this.parseJSON)
 			.catch(this.handleError);
 	}
 
-	extractData(response: Response) {
-		this.backgroundSurveys = JSON.parse(_removeComments(response.text()));
-		return this.backgroundSurveys;
+	/**
+	 *	Parse JSON after comments has been removed
+	 */
+	parseJSON(response: Response) {
+		return JSON.parse(_removeComments(response.text()));
 	}
 
 	handleError(error: any) {
@@ -188,6 +267,7 @@ export class LayerManagerService {
 		var gwLayer = this.createLayerFromConf(layerDescription);
 		if ( gwLayer ) {
 			this.addLayerToEngine(gwLayer);
+			this.gwLayers.push(gwLayer);
 		}
 		return gwLayer;
 	}

@@ -21,7 +21,7 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 	`
 		<md-sidenav-layout style="height: 100%;width: 340px; overflow-x: visible">
 			<md-sidenav style="overflow-x: hidden;" #start mode="side">
-				<background-layers [layers]="backgroundLayers"></background-layers>
+				<background-layers></background-layers>
 					
 				<!-- Use this list for additional layers later -->
 				<!--<md-list style="width: 300px;">
@@ -41,17 +41,17 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 	`
 })
 export class SidebarComponent {
-	layers: any;
-	backgroundLayers: any;
+	_layers: any;
 
 	constructor(private _layerManager:LayerManagerService) {
 		console.log("Hello sidebar");
-		_layerManager.getLayers().subscribe(res => {
-			this.backgroundLayers = res.filter(function(l) { return l.background })
-
-			console.log("sidebar layers", res);
-			this.layers = res;
-		})
 	}
+	get layers() {
+		return this._layerManager.backgroundSurveys.map(layers => {
+			this._layers = layers;
+			return this._layers;
+		});
+	}
+
 }
 

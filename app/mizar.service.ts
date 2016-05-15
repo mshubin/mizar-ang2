@@ -6,11 +6,11 @@ declare var AstroWeb: any;
 
 @Injectable()
 export class MizarService {
-	globe: any;
-	navigation: any;
+	public globe: any;
+	public navigation: any;
 	conf: Config;
 
-	constructor(private _configurationService:ConfigurationService) {	
+	constructor(private _configurationService:ConfigurationService) {
 	}
 
 	init(canvasId:string) {
@@ -43,22 +43,6 @@ export class MizarService {
 				new AstroWeb.KeyboardNavigationHandler()
 			]
 		});
-
-		var layerDesc = { 
-			"type": "healpix",
-			"name": "DSS",
-			"baseUrl": "http://demonstrator.telespazio.com/sitools/Alasky/DssColor",
-			"description": "Digital Sky Survey from CDS",
-			"attribution": "DSS backbround from <img width='48' height='32' src=\"css/images/cds.svg\" />",
-			"visible": true,
-			"background": true,
-			"numberOfLevels": 7
-		};
-
-		var healpixLayer = new AstroWeb.HEALPixLayer(layerDesc);
-		this.globe.setBaseImagery(healpixLayer);
-
-		console.log(AstroWeb);
 	}
 
 };
