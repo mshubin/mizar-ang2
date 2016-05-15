@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import 'rxjs/Rx';
   
-import { LayerManagerService } from './layerManager.service';
+import { LayerStore } from './layer.store';
 import { BackgroundLayersComponent } from './backgroundLayers.component';
 
 import { MD_SIDENAV_DIRECTIVES } from '@angular2-material/sidenav';
@@ -43,11 +43,11 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 export class SidebarComponent {
 	_layers: any;
 
-	constructor(private _layerManager:LayerManagerService) {
+	constructor(private _layerStore:LayerStore) {
 		console.log("Hello sidebar");
 	}
 	get layers() {
-		return this._layerManager.layers.map(layers => {
+		return this._layerStore.layers.map(layers => {
 			this._layers = layers;
 			return this._layers;
 		});

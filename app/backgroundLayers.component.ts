@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef, Input } from '@angular/core';
 
-import { LayerManagerService } from './layerManager.service';
+import { LayerStore } from './layer.store';
 import { MizarService } from './mizar.service';
 import { MdRadioButton, MdRadioGroup } from '@angular2-material/radio';
 import {MdRadioDispatcher} from '@angular2-material/radio/radio_dispatcher';
@@ -32,11 +32,11 @@ export class BackgroundLayersComponent {
 	selectedLayer: "none";
 	_backgroundLayers: any;
 
-	constructor(private _changeDetectionRef: ChangeDetectorRef, private _layerManager: LayerManagerService) {
+	constructor(private _changeDetectionRef: ChangeDetectorRef, private _layerStore: LayerStore) {
 	}
 
 	get backgroundLayers() {
-		return this._layerManager.layers.map(layers => {
+		return this._layerStore.layers.map(layers => {
 			this._backgroundLayers = layers.filter(l => {
 				return l.category == "background";
 			})
@@ -60,7 +60,7 @@ export class BackgroundLayersComponent {
 	}
 
 	selectLayer(layer) {
-		this._layerManager.setBackgroundSurvey(layer.name);
+		this._layerStore.setBackgroundSurvey(layer.name);
 		this._changeDetectionRef.detectChanges();
 	}
 }

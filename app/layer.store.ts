@@ -1,25 +1,16 @@
+/// <reference path="../node_modules/immutable/dist/immutable.d.ts" />
 import { Injectable } from '@angular/core';
-import {Http, Response} from '@angular/http';
+import { Http, Response } from '@angular/http';
 
 import { BehaviorSubject } from "rxjs/Rx";
 import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
+// import {List} from 'immutable';
+
 import { MizarService } from './mizar.service';
+import { LayerService } from './layer.service';
 declare var AstroWeb: any;
-
-/**
- *	Remove "C"-like comment lines from string
- */
-var _removeComments = function(string)
-{
-	var starCommentRe = new RegExp("/\\\*(.|[\r\n])*?\\\*/", "g");
-	var slashCommentRe = new RegExp("[^:]//.*[\r\n]", "g");
-	string = string.replace(slashCommentRe, "");
-	string = string.replace(starCommentRe, "");
-
-	return string;
-}
 
 /**
  *	HSV values in [0..1[
@@ -70,9 +61,7 @@ var _generateColor = function() {
 }
 
 @Injectable()
-export class LayerManagerService {
-
-	// Not REALLY GlobWeb layers but more its description
+export class LayerStore {
 	gwLayers: any[] = [];
 
 	// Inner representation of all surveys
@@ -81,12 +70,19 @@ export class LayerManagerService {
 		return this._layers.asObservable();
 	}
 
-	constructor(private http: Http, private _mizarService:MizarService) {
+	constructor(private _layerService: LayerService, private _mizarService:MizarService) {
 		// TODO: inject CONFIG if needed
 		// configuration = conf;
 		// Store the sky in the global module variable
 
-		this.getLayers().subscribe(
+		this.loadLayers();
+	}
+
+	/**
+	 *	Load layers from configuration
+	 */
+	loadLayers() {
+		this._layerService.getLayers().subscribe(
 			res => {
 				// Add complete descriptions of every layer
 				let layers = (<Object[]>res).map((layerDesc: any) => {
@@ -101,6 +97,11 @@ export class LayerManagerService {
 		);
 	}
 
+	/**
+	 *	Update layer description parameters:
+	 *	- missing parameters by default ones
+	 *	- process the existing parameters : color, opacity
+	 */
 	updateDefaults(layerDescription: any) {
 		// Update layer color
 		if ( layerDescription.color )
@@ -134,7 +135,10 @@ export class LayerManagerService {
 		}
 	}
 
-	createLayerFromConf(layerDescription:any) {
+	/**
+	 *	Create GlobWeb layer from description
+	 */
+	createLayerFromDescription(layerDescription: any) {
 		var gwLayer;
 
 		this.updateDefaults(layerDescription);
@@ -205,6 +209,9 @@ export class LayerManagerService {
 		return gwLayer;
 	}
 
+	/**
+	 *	Set current background survey by name
+	 */
 	setBackgroundSurvey(name:string) {
 		var globe = this._mizarService.globe;
 
@@ -218,6 +225,9 @@ export class LayerManagerService {
 		gwLayer._visible = true;
 	}
 
+	/**
+	 *	Add GlobWeb layer to globe
+	 */
 	addLayerToEngine(gwLayer:any) {
 		var globe = this._mizarService.globe;
 		if ( gwLayer.category == "background" ) {
@@ -242,28 +252,11 @@ export class LayerManagerService {
 		}
 	}
 
-	getLayers() {
-		// TODO: Add layerStore ?
-		return this.http.get('/app/layers.json')
-			.map(this.parseJSON)
-			.catch(this.handleError);
-	}
-
 	/**
-	 *	Parse JSON after comments has been removed
+	 *	Add layer to globe from the given description
 	 */
-	parseJSON(response: Response) {
-		return JSON.parse(_removeComments(response.text()));
-	}
-
-	handleError(error: any) {
-		let errMsg = error.message || 'Server error';
-		console.error(errMsg); // log to console instead
-		return Observable.throw(errMsg);
-	}
-
 	addLayer(layerDescription:any)  {
-		var gwLayer = this.createLayerFromConf(layerDescription);
+		var gwLayer = this.createLayerFromDescription(layerDescription);
 		if ( gwLayer ) {
 			this.addLayerToEngine(gwLayer);
 			this.gwLayers.push(gwLayer);
