@@ -15,19 +15,19 @@ declare var AstroWeb: any;
 
 @Injectable()
 export class LayerStore {
+
+	// Data store model
 	gwLayers: any[] = [];
 
-	// Inner representation of all surveys
-	private _layers: BehaviorSubject<any> = new BehaviorSubject([]);
-	get layers() {
-		return this._layers.asObservable();
-	}
+	private _layersObserver: Observer<any[]>; // Observer which will publish results
+	layers$: Observable<any[]>; // Observable which can be used by components
 
 	constructor(private _layerService: LayerService, private _mizarService:MizarService, private _utils:UtilsService) {
 		// TODO: inject CONFIG if needed
 		// configuration = conf;
 
 		this.loadLayers();
+		this.layers$ = new Observable(observer => this._layersObserver = observer).share();
 	}
 
 	/**
@@ -42,8 +42,9 @@ export class LayerStore {
 				}).filter(l => {
 					return l != null;
 				});
-				console.log("Publishing list", layers);
-				this._layers.next(layers);
+				this.gwLayers = layers;
+				console.log("Publishing/resolving", layers);
+				this._layersObserver.next(layers);
 			},
 			err => console.log("Error retrieving layers")
 		);
