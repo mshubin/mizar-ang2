@@ -20,6 +20,7 @@
     '@angular2-material/button': { main: 'button.js', defaultExtension: 'js', format: 'cjs'},
     '@angular2-material/list': { main: 'list.js', defaultExtension: 'js', format: 'cjs'},
     '@angular2-material/radio': { main: 'radio.js', defaultExtension: 'js', format: 'cjs'},
+    '@angular2-material/progress-circle': { main: 'progress-circle.js', defaultExtension: 'js', format: 'cjs'},
   };
 
   var packageNames = [
