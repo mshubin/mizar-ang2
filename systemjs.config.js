@@ -1,16 +1,11 @@
 (function(global) {
 
-  // paths
-  var paths = {
-    "local/*": "vendor/*"
-  };
   // map tells the System loader where to look for things
   var map = {
     'app':                        'app', // 'dist',
     'rxjs':                       'node_modules/rxjs',
     'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
     '@angular':                   'node_modules/@angular',
-    'GlobWebModule':                    'local/GlobWeb'
     '@angular2-material':         'node_modules/@angular2-material',
   };
 
@@ -20,9 +15,6 @@
     'build':                      { main: 'main.js', defaultExtension: 'js' },
     'rxjs':                       { defaultExtension: 'js' },
     'angular2-in-memory-web-api': { defaultExtension: 'js' },
-    'GlobWebModule':              { main: 'src/GlobWeb.js', defaultExtension:'js', meta: { './GlobWeb.js': {
-      format: 'amd'
-    } } }
     '@angular2-material/sidenav': { main: 'sidenav.js', defaultExtension: 'js', format: 'cjs'},
     '@angular2-material/core': { main: 'core.js', defaultExtension: 'js', format: 'cjs'},
     '@angular2-material/button': { main: 'button.js', defaultExtension: 'js', format: 'cjs'},
@@ -40,8 +32,7 @@
     '@angular/router',
     '@angular/router-deprecated',
     '@angular/testing',
-    '@angular/upgrade',
-    'GlobWeb'
+    '@angular/upgrade'
   ];
 
   // add package entries for angular packages in the form '@angular/common': { main: 'index.js', defaultExtension: 'js' }
@@ -50,7 +41,6 @@
   });
 
   var config = {
-    paths: paths,
     map: map,
     packages: packages
   }
