@@ -21,7 +21,7 @@ import { LayersPipe } from './layers.pipe';
 	`
 		<md-sidenav-layout style="height: 100%;width: 340px; overflow-x: visible">
 			<md-sidenav style="overflow-x: hidden;" #start mode="side">
-				<background-layers [layers]="layers$ | async | backgroundLayers:'category':'background'"></background-layers>
+				<background-layers [layers]="layers$ | async | layers:'category':'background'"></background-layers>
 					
 				<!-- Use this list for additional layers later -->
 				<!--<md-list style="width: 300px;">
